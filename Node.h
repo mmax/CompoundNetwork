@@ -30,7 +30,7 @@
 	int fontSize;
 	NSBezierPath * path;
 	NSColor * nodeColor;
-    //NSNumber * pullCount;
+    NSNumber * pullCount;
 	
 }
 
