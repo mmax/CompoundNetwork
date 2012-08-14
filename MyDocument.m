@@ -14,7 +14,7 @@
 #import "Filter.h"
 #import "QL.h"
 #import "Node.h"
-
+#import "NodeNavigation.h"
 
 
 @implementation MyDocument
@@ -599,6 +599,11 @@
 -(float)sollSum:(float)max{
 
 	return max/2 * (max+1);
+}
+
+-(IBAction)renderFlatMap:(id)sender{
+
+    [navigation renderFlatMap];
 }
 
 //-(void)openQuickLookPanel:(NSString*)path{		

@@ -8,7 +8,7 @@
 
 
 #import <Cocoa/Cocoa.h>
-@class Connector, Material, GraphCreator, Connection, Filter;
+@class Connector, Material, GraphCreator, Connection, Filter, NodeNavigation;
 
 
 
@@ -31,6 +31,7 @@
 	IBOutlet GraphCreator * graphCreator;
 	IBOutlet Filter * filter;
 	IBOutlet NSWindow * mainWindow;
+    IBOutlet NodeNavigation * navigation;
     BOOL preview;
 }
 
@@ -68,6 +69,8 @@
 -(IBAction)renderGraphics:(id)sender;
 -(IBAction)createConnections:(id)sender;
 -(NSMutableArray *)identityNames;
+
+-(IBAction)renderFlatMap:(id)sender;
 
 -(void) displayProgress:(BOOL) display;
 -(void) setProgress:(float)progress;

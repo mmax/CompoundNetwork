@@ -15,6 +15,7 @@
 		509AAB871306E98A009A62FE /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 509AAB861306E98A009A62FE /* Node.m */; };
 		509AAB8C1306EB72009A62FE /* GraphCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 509AAB8B1306EB72009A62FE /* GraphCreator.m */; };
 		509AAB9A1306ECF0009A62FE /* Graph.m in Sources */ = {isa = PBXBuildFile; fileRef = 509AAB991306ECF0009A62FE /* Graph.m */; };
+		50AE1B3415DA9C85008702D9 /* NodeNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50AE1B3315DA9C85008702D9 /* NodeNavigation.m */; };
 		50B3E503137FFED800BAA713 /* QL.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B3E502137FFED800BAA713 /* QL.m */; };
 		50B3E5071380001F00BAA713 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B3E5061380001F00BAA713 /* Quartz.framework */; };
 		50C618A413084B31006DF6C6 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C618A313084B31006DF6C6 /* Filter.m */; };
@@ -50,6 +51,8 @@
 		509AAB8B1306EB72009A62FE /* GraphCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphCreator.m; sourceTree = "<group>"; };
 		509AAB981306ECF0009A62FE /* Graph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
 		509AAB991306ECF0009A62FE /* Graph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Graph.m; sourceTree = "<group>"; };
+		50AE1B3215DA9C85008702D9 /* NodeNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeNavigation.h; sourceTree = "<group>"; };
+		50AE1B3315DA9C85008702D9 /* NodeNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeNavigation.m; sourceTree = "<group>"; };
 		50B3E501137FFED800BAA713 /* QL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QL.h; sourceTree = "<group>"; };
 		50B3E502137FFED800BAA713 /* QL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QL.m; sourceTree = "<group>"; };
 		50B3E5061380001F00BAA713 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
@@ -122,6 +125,8 @@
 				50B3E502137FFED800BAA713 /* QL.m */,
 				509AAB851306E98A009A62FE /* Node.h */,
 				509AAB861306E98A009A62FE /* Node.m */,
+				50AE1B3215DA9C85008702D9 /* NodeNavigation.h */,
+				50AE1B3315DA9C85008702D9 /* NodeNavigation.m */,
 				509AAB8A1306EB72009A62FE /* GraphCreator.h */,
 				509AAB8B1306EB72009A62FE /* GraphCreator.m */,
 				509AAB981306ECF0009A62FE /* Graph.h */,
@@ -240,6 +245,7 @@
 				509AAB9A1306ECF0009A62FE /* Graph.m in Sources */,
 				50C618A413084B31006DF6C6 /* Filter.m in Sources */,
 				50B3E503137FFED800BAA713 /* QL.m in Sources */,
+				50AE1B3415DA9C85008702D9 /* NodeNavigation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
