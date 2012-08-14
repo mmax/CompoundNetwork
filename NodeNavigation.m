@@ -9,7 +9,7 @@
 #import "NodeNavigation.h"
 #import "MyDocument.h"
 #import "Material.h"
-
+#import "NavigationView.h"
 
 @implementation NodeNavigation
 
@@ -101,6 +101,8 @@
         //NSLog(@"unsorted fresh: %@", [tempCenter valueForKey:@"connections"]);
 
         [tempCenter setValue:[self sortConnections:[tempCenter valueForKey:@"connections"]] forKey:@"connections"];
+        [tempCenter setValue:[NSNumber numberWithInt:[[tempCenter valueForKey:@"connections"]count]] forKey:@"connectionCount"];
+                                                       
         i++;
         //NSLog(@"done: %@", [tempCenter valueForKey:@"name"]);
     }
@@ -155,5 +157,9 @@
     [(NSMutableArray *)[self valueForKey:@"materialConnections"]addObject:d];
 
 }
+
+-(NSSize)size{return [view bounds].size;}
+
+-(NSPoint)center{return NSMakePoint([self size].width*.5, [self size].height*.5/* -(kNodeSize*.5) */);}
 
 @end

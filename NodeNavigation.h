@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class MyDocument, Graph, Node, Material;
+@class MyDocument, Graph, Node, Material, NavigationView;
 
 @interface NodeNavigation : NSObject {
 
     NSMutableDictionary * dict;
     IBOutlet MyDocument * doc;
+    IBOutlet NavigationView * view;
     
 }
 
@@ -23,9 +24,14 @@
 -(void)renderConnections;
 
 -(NSMutableDictionary *)dictionaryForMaterialNamed:(NSString *)name inArray:(NSArray *)array withKey:(NSString *)key;
-//-(BOOL)isMaterialNamed:(NSString *)name inConnectionArray:(NSArray *)array;
+
 -(id)valueForKey:(NSString *)key;
 -(void)setValue:(id)v forKey:(NSString *)key;
+
+-(NSSize)size;
+
+-(NSPoint)center;
+
 
 @end
 
