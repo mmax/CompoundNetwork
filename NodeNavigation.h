@@ -29,7 +29,7 @@
 -(void)renderConnections;
 -(void)renderBrowsePaths;
 -(void)createLineInPath:(NSBezierPath *)p fromCenterTo:(NSPoint)target withLineWidth:(float)width;
--(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r;
+-(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r andRotation:(float)rot;
 -(NSMutableDictionary *)dictionaryForMaterialNamed:(NSString *)name inArray:(NSArray *)array withKey:(NSString *)key;
 
 -(id)valueForKey:(NSString *)key;

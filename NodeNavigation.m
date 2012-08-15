@@ -74,7 +74,7 @@
     [doc setProgressTask:@"rendering graphics..."];
 
     NSPoint center = [self center];
-    float x, y, r, primaryR = 80, secondaryR = 50, offset= 100, secondaryRComposite, width, progress=0, matCount = [[self valueForKey:@"materialConnections"]count];
+    float x, y, r, rot, primaryR = 60, secondaryR = 40, offset= 90, secondaryRComposite, width, progress=0, matCount = [[self valueForKey:@"materialConnections"]count];
     int a=0;
     secondaryRComposite = primaryR+offset+secondaryR;
     
@@ -98,7 +98,8 @@
             secondaryN =[[[[[d valueForKey:@"connections"]objectAtIndex:i]valueForKey:@"targetDictionary"]valueForKey:@"connectionCount"]intValue];
             NSPoint secondaryCenter = NSMakePoint(x, y);
             r = n > 3 ? 2*M_PI*secondaryRComposite/(n*3) : secondaryR;
-            NSBezierPath * secondary = [self createPolygonAroundCenter:secondaryCenter withNAngles:secondaryN andRadius:r];
+            rot = (float)i/n;
+            NSBezierPath * secondary = [self createPolygonAroundCenter:secondaryCenter withNAngles:secondaryN andRadius:r andRotation:rot];
 
             // CREATE CONNECTION (LINE)
             NSBezierPath * connection =[[[NSBezierPath alloc]init]autorelease];
@@ -115,7 +116,7 @@
             [nodes addObject:sd];
         }
         // CREATE PRIMARY POLYGON
-        NSBezierPath * primary = [self createPolygonAroundCenter:center withNAngles:n andRadius:primaryR];
+        NSBezierPath * primary = [self createPolygonAroundCenter:center withNAngles:n andRadius:primaryR andRotation:.5];
         [primary closePath];
         
         // STORE DATA
@@ -124,7 +125,6 @@
         [pd setValue:[d valueForKey:@"name"] forKey:@"name"];
         [d setValue:pd forKey:@"primaryBrowseNode"];
         [d setValue:nodes forKey:@"secondaryBrowseNodes"];
-        
     }
 }
 
@@ -136,21 +136,37 @@
     [p closePath];
 }
 
--(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r{
+-(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r andRotation:(float)rot{
    
     float x, y;
     NSBezierPath * p;
     
-    if(n<3){
+    
+    if(n<4){
         NSRect rect = NSMakeRect(center.x-r, center.y-r, r*2, r*2);
         p = [NSBezierPath bezierPathWithOvalInRect:rect];
     }
     else{
+//        float deltaX = center.x - [self center].x;
+//        float deltaY = center.y - [self center].y;
+////        float c = pow(pow(deltaX, 2) + pow(deltaY, 2), 0.5);
+////        float scaling = r/c;
+////        startPoint = NSMakePoint(center.x+deltaX*scaling, center.y+deltaY*scaling);
+//         
+//        
+//        float alpha = atan(deltaY/deltaX);
+        
+        float offset =  M_PI+2*M_PI*(rot);//0;//M_PI;// * (360.0 / atan(deltaX/deltaY));
+
         p = [NSBezierPath bezierPath];
-        [p moveToPoint:NSMakePoint(center.x, center.y+r)];
-        for(int i=0;i<n;i++){
-            x = r * sin((2*M_PI*i)/n);
-            y = r * cos((2*M_PI*i)/n);
+        x = r * sin(offset);
+        y = r * cos(offset);
+        [p moveToPoint:NSMakePoint(center.x+x, center.y+y)];
+        //[p moveToPoint:startPoint];//NSMakePoint(center.x, center.y+r)];
+        for(int i=1;i<n+1;i++){
+            x = r * sin((2*M_PI*i)/n+offset);
+            y = r * cos((2*M_PI*i)/n+offset);
+            //[p lineToPoint:center];
             [p lineToPoint:NSMakePoint(center.x+x, center.y+y)];
         }
         [p closePath];

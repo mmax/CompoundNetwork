@@ -62,7 +62,7 @@
     NSMutableAttributedString *s = [[[NSMutableAttributedString alloc]initWithString:[d valueForKey:@"name"]]autorelease];
     NSBezierPath * p = [d valueForKey:@"nodePath"];
     NSRect textRec = [p bounds];
-    int stringOffset = textRec.size.width*.25;
+    int stringOffset = textRec.size.width*.2;
     textRec.origin.x += stringOffset;
     textRec.origin.y += stringOffset;
     textRec.size.width -= 2*stringOffset;
@@ -70,7 +70,7 @@
     
     NSRange tRange = NSMakeRange(0, [s length]);	
     [s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:tRange];
-    [s addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica Neue" size:10] range:tRange];
+    [s addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica Neue" size:11] range:tRange];
     [s drawInRect:textRec];
     
 }
