@@ -22,6 +22,9 @@
 -(void)createRawEntryForMaterial:(Material *)m;
 -(NSArray *)sortConnections:(NSArray *)unsorted;
 -(void)renderConnections;
+-(void)renderBrowsePaths;
+-(void)createLineInPath:(NSBezierPath *)p fromCenterTo:(NSPoint)target withLineWidth:(float)width;
+-(void)createPolygonInPath:(NSBezierPath *)p aroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r;    
 
 -(NSMutableDictionary *)dictionaryForMaterialNamed:(NSString *)name inArray:(NSArray *)array withKey:(NSString *)key;
 
