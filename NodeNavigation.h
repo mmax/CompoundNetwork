@@ -15,8 +15,13 @@
     NSMutableDictionary * dict;
     IBOutlet MyDocument * doc;
     IBOutlet NavigationView * view;
+    IBOutlet NSArrayController * navigationMaterialArrayController;
+    IBOutlet NSPopUpButton * materialPopUp;
     
 }
+
+-(IBAction)activeMaterialChanged:(id)sender;
+-(void)setActiveMaterialToMaterialNamed:(NSString *)name;
 
 -(void)renderFlatMap;
 -(void)createRawEntryForMaterial:(Material *)m;
@@ -24,8 +29,7 @@
 -(void)renderConnections;
 -(void)renderBrowsePaths;
 -(void)createLineInPath:(NSBezierPath *)p fromCenterTo:(NSPoint)target withLineWidth:(float)width;
--(void)createPolygonInPath:(NSBezierPath *)p aroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r;    
-
+-(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r;
 -(NSMutableDictionary *)dictionaryForMaterialNamed:(NSString *)name inArray:(NSArray *)array withKey:(NSString *)key;
 
 -(id)valueForKey:(NSString *)key;

@@ -15,5 +15,5 @@
     IBOutlet NodeNavigation * navigation;
 }
 
-
+-(void)drawStringForNode:(NSMutableDictionary *)d;
 @end

@@ -44,6 +44,7 @@
 }
 
 -(void)renderFlatMap{
+    [navigationMaterialArrayController bind:@"contentArray" toObject:doc withKeyPath:@"materials" options:nil];
     
     [doc setProgressTask:@"computing connections..."];
     [doc setProgress:0];
@@ -60,6 +61,9 @@
     [self renderConnections];
     
     [self renderBrowsePaths];
+    
+    //[self setValue:[[self valueForKey:@"materialConnections"]objectAtIndex:0] forKey:@"activeMaterial"];
+    [self setActiveMaterialToMaterialNamed:[materialPopUp titleOfSelectedItem]];
     [[view window]makeKeyAndOrderFront:nil];
     [doc displayProgress:NO];
 }
@@ -70,47 +74,57 @@
     [doc setProgressTask:@"rendering graphics..."];
 
     NSPoint center = [self center];
-    float x, y, primaryR = 80, secondaryR = 50, offset= 100, secondaryRComposite, width, progress=0, matCount = [[self valueForKey:@"materialConnections"]count];
+    float x, y, r, primaryR = 80, secondaryR = 50, offset= 100, secondaryRComposite, width, progress=0, matCount = [[self valueForKey:@"materialConnections"]count];
     int a=0;
+    secondaryRComposite = primaryR+offset+secondaryR;
+    
     for (NSMutableDictionary *d in [self valueForKey:@"materialConnections"]){
         
         progress = a/ matCount*100.0;
         [doc setProgress:progress];
         
-        NSBezierPath * primary = [[[NSBezierPath alloc]init]autorelease];
         NSMutableArray * nodes = [[[NSMutableArray alloc]init]autorelease];
-        NSMutableArray * connections = [[[NSMutableArray alloc]init]autorelease];
-
+        
         int n = [[d valueForKey:@"connectionCount"]intValue], secondaryN;
-        NSLog(@"rendering: %@ with %d connections", [d valueForKey:@"name"], n);
+        //NSLog(@"rendering: %@ with %d connections", [d valueForKey:@"name"], n);
         for(int i=0;i<n;i++){
             
             // COMPUTE CENTER OF SECONDARY POLYGON
-            secondaryRComposite = primaryR+offset+secondaryR;
+
             x = secondaryRComposite * sin((2*M_PI*i)/n) + center.x;
             y = secondaryRComposite * cos((2*M_PI*i)/n) + center.y;
            
             // CREATE SECONDARY POLYGON
             secondaryN =[[[[[d valueForKey:@"connections"]objectAtIndex:i]valueForKey:@"targetDictionary"]valueForKey:@"connectionCount"]intValue];
-            NSBezierPath * secondary = [[[NSBezierPath alloc]init]autorelease];
             NSPoint secondaryCenter = NSMakePoint(x, y);
-            [self createPolygonInPath:secondary aroundCenter:secondaryCenter withNAngles:secondaryN andRadius:secondaryR];
-            [nodes addObject:secondary];
-    
+            r = n > 3 ? 2*M_PI*secondaryRComposite/(n*3) : secondaryR;
+            NSBezierPath * secondary = [self createPolygonAroundCenter:secondaryCenter withNAngles:secondaryN andRadius:r];
+
             // CREATE CONNECTION (LINE)
             NSBezierPath * connection =[[[NSBezierPath alloc]init]autorelease];
             width = [[[[[d valueForKey:@"connections"]objectAtIndex:i]valueForKey:@"targetDictionary"]valueForKey:@"connectionCount"]intValue];
             [self createLineInPath:connection fromCenterTo:secondaryCenter withLineWidth:width];
-            [connections addObject:connection];
+            //[connections addObject:connection];
+
+            // STORE DATA
+            NSMutableDictionary * sd = [NSMutableDictionary dictionary];
+            [sd setValue:secondary forKey:@"nodePath"];
+            [sd setValue:[[[[d valueForKey:@"connections"]objectAtIndex:i]valueForKey:@"targetDictionary"]valueForKey:@"name"] forKey:@"name"];
+            [sd setValue:connection forKey:@"line"];
+            [sd setValue:[[[[d valueForKey:@"connections"]objectAtIndex:i]valueForKey:@"targetDictionary"]valueForKey:@"connectionCount"] forKey:@"strength"];
+            [nodes addObject:sd];
         }
         // CREATE PRIMARY POLYGON
-        [self createPolygonInPath:primary aroundCenter:center withNAngles:n andRadius:primaryR];
+        NSBezierPath * primary = [self createPolygonAroundCenter:center withNAngles:n andRadius:primaryR];
         [primary closePath];
         
         // STORE DATA
-        [d setValue:primary forKey:@"primaryBrowseNode"];
+        NSMutableDictionary * pd = [NSMutableDictionary dictionary];
+        [pd setValue:primary forKey:@"nodePath"];
+        [pd setValue:[d valueForKey:@"name"] forKey:@"name"];
+        [d setValue:pd forKey:@"primaryBrowseNode"];
         [d setValue:nodes forKey:@"secondaryBrowseNodes"];
-        [d setValue:connections forKey:@"browseConnectionPaths"];
+        
     }
 }
 
@@ -122,15 +136,17 @@
     [p closePath];
 }
 
--(void)createPolygonInPath:(NSBezierPath *)p aroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r{
+-(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r{
    
     float x, y;
+    NSBezierPath * p;
     
     if(n<3){
-        NSRect rect = NSMakeRect(center.x-r*.5, center.y-r*.5, r, r);
+        NSRect rect = NSMakeRect(center.x-r, center.y-r, r*2, r*2);
         p = [NSBezierPath bezierPathWithOvalInRect:rect];
     }
     else{
+        p = [NSBezierPath bezierPath];
         [p moveToPoint:NSMakePoint(center.x, center.y+r)];
         for(int i=0;i<n;i++){
             x = r * sin((2*M_PI*i)/n);
@@ -139,6 +155,7 @@
         }
         [p closePath];
     }
+    return p;
 }
 
 
@@ -237,4 +254,21 @@
 
 -(NSPoint)center{return NSMakePoint([self size].width*.5, [self size].height*.5/* -(kNodeSize*.5) */);}
 
+-(IBAction)activeMaterialChanged:(id)sender{
+
+//    NSLog(@"%@", [materialPopUp titleOfSelectedItem]);
+    [self setActiveMaterialToMaterialNamed:[materialPopUp titleOfSelectedItem]];
+    [view setNeedsDisplay:YES]; 
+}
+
+-(void)setActiveMaterialToMaterialNamed:(NSString *)name{
+
+    for(NSDictionary * d in [self valueForKey:@"materialConnections"]){
+    
+        if([[d valueForKey:@"name"]isEqualToString:name]){
+            [self setValue:d forKey:@"activeMaterial"];
+            return;
+        }
+    }
+}
 @end
