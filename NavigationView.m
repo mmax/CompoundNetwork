@@ -42,7 +42,8 @@
         [[NSColor blackColor]set];
         [p stroke];
         
-        [self drawStringForNode:sd];		
+        [self drawNameStringForNode:sd];	
+        [self drawInfoStringForNode:sd];
         
     }
     
@@ -52,12 +53,21 @@
     [p fill];
     [[NSColor blackColor]set];
     [p stroke];
-    [self drawStringForNode:pd];
+    [self drawNameStringForNode:pd];
 
 }
 
+-(void)drawInfoStringForNode:(NSMutableDictionary *)d{
+    NSMutableAttributedString *s = [[[NSMutableAttributedString alloc]initWithString:[d valueForKey:@"infoText"]]autorelease];
+    NSRange tRange = NSMakeRange(0, [s length]);	
+    NSPoint o = [[d valueForKey:@"infoTextRecOrigin"]pointValue];
+    NSRect r = NSMakeRect(o.x, o.y, [[d valueForKey:@"infoTextRecWidth"]floatValue], [[d valueForKey:@"infoTextRecHeight"]floatValue]);
+    [s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:tRange];
+    [s addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica Neue" size:9] range:tRange];
+    [s drawInRect:r];
+}
 
--(void)drawStringForNode:(NSMutableDictionary *)d{
+-(void)drawNameStringForNode:(NSMutableDictionary *)d{
 
     NSMutableAttributedString *s = [[[NSMutableAttributedString alloc]initWithString:[d valueForKey:@"name"]]autorelease];
     NSBezierPath * p = [d valueForKey:@"nodePath"];

@@ -31,6 +31,7 @@
 -(void)createLineInPath:(NSBezierPath *)p fromCenterTo:(NSPoint)target withLineWidth:(float)width;
 -(NSBezierPath *)createPolygonAroundCenter:(NSPoint)center withNAngles:(int)n andRadius:(float)r andRotation:(float)rot;
 -(NSMutableDictionary *)dictionaryForMaterialNamed:(NSString *)name inArray:(NSArray *)array withKey:(NSString *)key;
+-(NSString *)infoTextForConnection:(NSDictionary *)d;
 
 -(id)valueForKey:(NSString *)key;
 -(void)setValue:(id)v forKey:(NSString *)key;

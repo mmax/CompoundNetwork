@@ -74,7 +74,7 @@
     [doc setProgressTask:@"rendering graphics..."];
 
     NSPoint center = [self center];
-    float x, y, r, rot, primaryR = 60, secondaryR = 40, offset= 90, secondaryRComposite, width, progress=0, matCount = [[self valueForKey:@"materialConnections"]count];
+    float x, y, r, rot, primaryR = 50, secondaryR = 30, offset= 70, secondaryRComposite, width, progress=0, matCount = [[self valueForKey:@"materialConnections"]count], textRecWidth = 60, textRecHeight = 70;
     int a=0;
     secondaryRComposite = primaryR+offset+secondaryR;
     
@@ -114,6 +114,17 @@
             [sd setValue:connection forKey:@"line"];
             [sd setValue:[[[[d valueForKey:@"connections"]objectAtIndex:i]valueForKey:@"targetDictionary"]valueForKey:@"connectionCount"] forKey:@"strength"];
             [nodes addObject:sd];
+            
+            // INFO TEXT POINT
+            x = (secondaryRComposite + offset *1.5) * sin((2*M_PI*i)/n) + center.x - textRecWidth*.5;
+            y = (secondaryRComposite + offset *1.5) * cos((2*M_PI*i)/n) + center.y - textRecHeight*.5;
+            [sd setValue:[NSValue valueWithPoint:NSMakePoint(x, y)] forKey:@"infoTextRecOrigin"];
+            
+            // INFO TEXT
+            [sd setValue:[self infoTextForConnection:[[d valueForKey:@"connections"]objectAtIndex:i]] forKey:@"infoText"];
+            [sd setValue:[NSNumber numberWithFloat:textRecWidth] forKey:@"infoTextRecWidth"];
+            [sd setValue:[NSNumber numberWithFloat:textRecHeight] forKey:@"infoTextRecHeight"];
+            
         }
         // CREATE PRIMARY POLYGON
         NSBezierPath * primary = [self createPolygonAroundCenter:center withNAngles:n andRadius:primaryR andRotation:.5];
@@ -126,6 +137,15 @@
         [d setValue:pd forKey:@"primaryBrowseNode"];
         [d setValue:nodes forKey:@"secondaryBrowseNodes"];
     }
+}
+
+-(NSString *)infoTextForConnection:(NSDictionary *)d{
+
+    NSString * s = [NSString stringWithFormat:@"strength: %d\ntags:\n", [[d valueForKey:@"strength"]intValue]];
+    for(NSString * t in [d valueForKey:@"tags"]){
+        s = [s stringByAppendingFormat:@"%@ ", [t valueForKey:@"name"]];
+     }
+    return s;
 }
 
 -(void)createLineInPath:(NSBezierPath *)p fromCenterTo:(NSPoint)target withLineWidth:(float)width{
